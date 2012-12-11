@@ -1,0 +1,276 @@
+# Copyright 2012 Michael Juen und Nikolaus Fleischhacker
+# ALS is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Luminosus is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+#:kivy 1.0
+
+<fc_gui>:
+    t_universe:textinput_universe
+    t_channel:textinput_channel
+
+    l_status:label_status
+    
+    l_test_channel_1:label_channel_test_1
+    l_test_channel_2:label_channel_test_2
+    l_test_channel_3:label_channel_test_3
+    l_test_channel_4:label_channel_test_4
+    l_test_channel_5:label_channel_test_5
+    
+    l_test_1:label_test_1
+    l_test_2:label_test_2
+    l_test_3:label_test_3
+    l_test_4:label_test_4
+    l_test_5:label_test_5
+    
+    s_test_1:slider_test_1
+    s_test_2:slider_test_2
+    s_test_3:slider_test_3
+    s_test_4:slider_test_4
+    s_test_5:slider_test_5
+    
+    l_test_status:label_test_status
+    l_test_status2:label_test_status2
+    
+    size_hint: .9, .9                                       #x% der breite und x% der hoehe
+    pos_hint: {'center_x': .47, 'center_y': .55}              #x und y center auf x%    
+    default_tab_content: panel_main_content                     #ID des inhaltes des default tabs
+    default_tab_text: 'Home'                              #Text des default tabs
+    #PANEL - MAIN
+    BoxLayout:
+        id: panel_main_content
+        orientation: 'vertical'
+        padding: 20
+        spacing: 20
+        GridLayout:
+            size_hint: 1, 0.30   
+            cols: 2
+            Button:
+                text: 'Add a new Fixture'
+                #size_hint: .5, .1
+            Label:
+                text:'Deletes all the Data to create a new fixture.'
+            Button:
+                text: 'Open a existing Fixture'
+                #size_hint: .5, .1
+            Label:
+                text:'Opens an existing fixture out of the internal fixture library.'
+                
+            Button:
+                text: 'Save current Fixture'
+            Label:
+                text:'Saves the current data into the internal fixture library.'
+        Label:
+            text:''
+            size_hint: 1, .10 
+        GridLayout: 
+            size_hint: 1, .30 
+            cols: 2
+            Button:
+                text: 'Start ArtNet'
+                on_press:root.button_artnet_start()
+            Label:
+                text:'Starts the ArtNet DMX output thread for live checking.'
+            Button:
+                text: 'Stop ArtNet'
+                on_press:root.button_artnet_stop()
+            Label:
+                text:'Stops the ArtNet DMX output thread'
+            BoxLayout:
+                Label:
+                    text:'Universe'
+                TextInput:
+                    id:textinput_universe
+                    text:'0'
+                    font_size: 40
+                    multiline:False
+                    focus:True     
+                    on_text_validate:root.action_textinput_universe()               
+                Label:
+                    text:'Startaddress'
+                TextInput:
+                    id:textinput_channel
+                    text:'1'
+                    font_size: 40
+                    multiline:False
+                    focus:True 
+                    on_text_validate:root.action_textinput_channel()     
+            Label:
+                text:'DMX Data, where the fixture is positioned in the rig'
+                
+        Label:
+            text:''
+            size_hint: 1, .10
+        GridLayout: 
+            size_hint: 1, .10 
+            cols: 2   
+            Button:
+                text: 'Quit Fixture Creator'
+                on_press:root.action.quit()
+            Label:
+                text:'Quits the program withoout saving changes.'  
+                
+        Label:
+            size_hint: 1, .10 
+            id:label_status
+            text:'Copyright 2012 by audiowerk - Juen Michael, Fleischhacker Nikolaus. --- This application is part of the audiowerk ALC Lightning System.'   
+    #PANEL - MOVEMENT
+    BoxLayout:
+        id: panel_movement_content
+        orientation: 'vertical' 
+        Label:
+            id:label_test_status2
+            text:'status'
+            size_hint: 1, .15
+    #PANEL - FIXTURE TEST
+    BoxLayout:
+        id: panel_test_content
+        orientation: 'vertical'    
+        GridLayout:
+            cols: 5
+            #Zeile0
+            #Adresse1
+            Label:
+                id:label_channel_test_1
+                text:"Address "+str(root.channel)
+                font_size: 30
+            #Adresse2
+            Label:
+                id:label_channel_test_2
+                text:"Address 2"
+                font_size: 30
+            #Adresse3
+            Label:
+                id:label_channel_test_3
+                text:"Address 3"
+                font_size: 30
+            #Adresse4
+            Label:
+                id:label_channel_test_4
+                text:"Address 4"
+                font_size: 30
+            #Adresse5
+            Label:
+                id:label_channel_test_5
+                text:"Address 5"
+                font_size: 30
+                
+            #Zeile1
+            #Wert1
+            Label:
+                id:label_test_1
+                text:"0"
+            #Wert2
+            Label:
+                id:label_test_2
+                text:"0"
+            #Wert3
+            Label:
+                id:label_test_3
+                text:"0"
+            #Wert4
+            Label:
+                id:label_test_4
+                text:"0"
+            #Wert5
+            Label:
+                id:label_test_5
+                text:"0"
+            #Zeile2
+            #Slider1
+            Slider:
+                id: slider_test_1
+                min:0
+                max:255
+                value:0
+                orientation:'vertical'
+                on_touch_move:root.action_slider_1()
+            #Slider2
+            Slider:
+                id: slider_test_2
+                min:0
+                max:255
+                value:0
+                orientation:'vertical'
+                on_touch_move:root.action_slider_2()
+            #Slider3
+            Slider:
+                id: slider_test_3
+                min:0
+                max:255
+                value:0
+                orientation:'vertical'
+                on_touch_move:root.action_slider_3()
+            #Slider4
+            Slider:
+                id: slider_test_4
+                min:0
+                max:255
+                value:0
+                orientation:'vertical'
+                on_touch_move:root.action_slider_4()
+            #Slider5
+            Slider:
+                id: slider_test_5
+                min:0
+                max:255
+                value:0
+                orientation:'vertical'
+                on_touch_move:root.action_slider_5()
+        Label:
+            id:label_test_status
+            text:'status'
+            size_hint: 1, .15
+    #PANEL - xxx                            
+    Label:
+        id: set1_content
+        text: 'First tab content area'
+
+    BoxLayout:
+        id: set2_content
+        Label:
+            text: 'Second tab content area'
+        Button:
+            text: 'Button that does nothing'
+
+    TabbedPanelHeader:
+        text: 'The Fixture'
+        content: set1_content
+
+    TabbedPanelHeader:
+        text: 'Channel Map'
+        content: set2_content
+        
+    TabbedPanelHeader:
+        text: 'Lights'
+        content: set2_content
+        
+    TabbedPanelHeader:
+        text: 'Colors'
+        content: set2_content
+
+    TabbedPanelHeader:
+        text: 'Gobos'
+        content: set2_content
+
+    TabbedPanelHeader:
+        text: 'Movement'
+        content: panel_movement_content
+        
+    TabbedPanelHeader:
+        text: 'Specials'
+        content: set2_content
+        
+    TabbedPanelHeader:
+        text: 'Test Fixture'
+        content: panel_test_content
+        #on_release:root.tab_panel_test()
